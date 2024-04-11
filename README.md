@@ -1,7 +1,7 @@
 # AST_Automation
 
 ## Overview
-AST_Automation is a project aimed at automating certain tasks related to [describe what the project does]. It leverages both backend API and image processing capabilities to achieve its objectives.
+AST_Automation is a project aimed at automating the rapid testing of AST results. It streamlines the process by leveraging both backend API and image processing capabilities to achieve its objectives.
 
 ## Installation
 1. Install required libraries and run backend API and image processing:
