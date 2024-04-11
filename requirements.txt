@@ -1,0 +1,8 @@
+opencv-python
+numpy
+scipy
+flask
+Pillow
+sqlite3
+matplotlib
+flask flask_sqlalchemy
