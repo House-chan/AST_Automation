@@ -45,7 +45,7 @@ class PelletsDetector:
             self.img_crop = PlateDetector.circle_crop(img, self.plate_circle, pad=0, normalize_size=True)
             self.med_circles = MedicineDetector.detect(self.img_crop, pad=0)
 
-            plate_radius_real = 6.2 / 2
+            plate_radius_real = 6.35  / 2
             self.scale_factor = plate_radius_real / self.med_circles[0, 0, 2]
 
 
