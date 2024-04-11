@@ -4,6 +4,10 @@
 AST_Automation is a project aimed at automating the rapid testing of AST results. It streamlines the process by leveraging both backend API and image processing capabilities to achieve its objectives.
 
 ## Installation
+0. To clone the project
+   ```bash
+   git clone https://github.com/keur1234/AST_Automation.git
+   ```
 1. Install required libraries and run backend API and image processing:
    ```bash
    pip install -r requirements.txt
@@ -15,5 +19,4 @@ AST_Automation is a project aimed at automating the rapid testing of AST results
    npm install
    npm run dev
    ```
-
 
