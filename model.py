@@ -326,12 +326,23 @@ def post_med_data():
         # If an error occurs during processing, return an error response
         return jsonify({"error": str(e)}), 500
   
-
+import base64
 @app.route('/api/med_info', methods=['GET'])
 def get_med_info():
     if pellets_detector.med_loc is not None and pellets_detector.med_rad is not None:
         # med_json = [{'x': loc[0], 'y': loc[1], 'radius': rad, 'predict_diameter': diam} for loc, rad, diam in zip(pellets_detector.med_loc, pellets_detector.med_rad, pellets_detector.inhibition_zone_diam)]
-        med_data = [(loc[0], loc[1], diam, pellets.tolist()) for loc, diam, pellets in zip(pellets_detector.med_loc, pellets_detector.inhibition_zone_pixels, pellets_detector.pellets)]
+        
+        images_data = []
+        for img_array in pellets_detector.pellets:
+            # Convert the NumPy array to an image
+            img = cv2.cvtColor(img_array, cv2.COLOR_GRAY2RGB)
+            # Convert the image to a byte array
+            _, img_encoded = cv2.imencode('.png', img)
+            # Encode the byte array as a base64 string
+            img_base64 = base64.b64encode(img_encoded).decode('utf-8')
+            # Add the base64 string to the list
+            images_data.append(img_base64)
+        med_data = [(loc[0], loc[1], diam, images_data) for loc, diam, images_data in zip(pellets_detector.med_loc, pellets_detector.inhibition_zone_pixels, images_data)]
         print(med_data)
         return (med_data), 200
     else:
