@@ -145,16 +145,37 @@ class PelletsDetector:
             # Set a threshold to determine significant change
             t_param = np.abs(np.mean(dy) - np.std(dy)) * 0.7
             threshold = np.mean(moving_average(abs(dy), 2)) / np.std(dy)  + 0.3
-            
-            # After 100 of range we dont use, As we know range can not be over 100 px
-            # change_points = np.where((np.abs(dy) > threshold))[0]
+                
+                # After 100 of range we dont use, As we know range can not be over 100 px
+                # change_points = np.where((np.abs(dy) > threshold))[0]
 
-            # Assuming dy and threshold are defined elsewhere
+                # Assuming dy and threshold are defined elsewhere
             change_points = np.arange(0, len(dy), 4)[(dy)[::4] > threshold]
+            cp_status = True
+            cp_count = 0
+            fake_last_index = -1
+
+            for (index_value, index)  in zip(change_points, range(len(change_points))):
+                if (index == 0) : continue
+                else : print(y[index_value] - y[index_value -1], index)
+                if (y[index_value] - y[index_value - 1] <= 0 and cp_status) : continue
+                if ((y[index_value] - y[index_value - 1] <= 0) and not cp_status) : 
+                    print(index_value)
+                    fake_last_index = index -1
+                    break
+                if (y[index_value] - y[index_value -1] > 0) : 
+                    cp_status = False
+                    cp_count += 1
+                if cp_count >= 3: 
+                    fake_last_index = index
+                    break
 
             if len(change_points) > 0:
-                predict_radius = x[change_points[-1]] - x[change_points[0]]
+                for index in change_points:
+                    print(f"Index: {index}, Value: {y[index]}")
+                predict_radius = x[change_points[fake_last_index]] - x[change_points[0]]
                 predict_radius_list.append(predict_radius)
+                
             else:
                 print("Inhibition Zone Not Found")
                 predict_radius_list.append(0)
