@@ -2,14 +2,14 @@
 0,AMP: Ampicillin,>=17,,>=14  <17,<=13,Enterobacterales
 1,PIP: Piperacillin,>=21,,>=18  <21,<=17,Enterobacterales
 2,MEC: Mecillinam,>=15,,>=12  <15,<=11,Enterobacterales
-3,: Amoxicillin-clavulanate,>=18,,>=14  <18,<=13,Enterobacterales
-4,: Ampicillin-sulbactam,>=15,,>=12  <15,<=11,Enterobacterales
-5,: Ceftolozane-tazobactam,>=21,,>=18  <21,<=17,Enterobacterales
-6,: Ceftazidime-avibactam,>=21,,,<=20,Enterobacterales
-7,: Imipenem-relebactam,>=25,,>=21  <25,<=20,Enterobacterales
-8,: Meropenem-vaborbactam,>=18,,>=15  <18,<=14,Enterobacterales
-9,: Piperacillin-tazobactam,>=21,,>=18  <21,<=17,Enterobacterales
-10,: Ticarcillin-clavulanate,>=20,,>=15  <20,<=14,Enterobacterales
+3,AMCAMC: Amoxicillin-clavulanate,>=18,,>=14  <18,<=13,Enterobacterales
+4,SAMSAM: Ampicillin-sulbactam,>=15,,>=12  <15,<=11,Enterobacterales
+5,CZT: Ceftolozane-tazobactam,>=21,,>=18  <21,<=17,Enterobacterales
+6,CZA: Ceftazidime-avibactam,>=21,,,<=20,Enterobacterales
+7,IMR: Imipenem-relebactam,>=25,,>=21  <25,<=20,Enterobacterales
+8,MEV: Meropenem-vaborbactam,>=18,,>=15  <18,<=14,Enterobacterales
+9,TZP: Piperacillin-tazobactam,>=21,,>=18  <21,<=17,Enterobacterales
+10,TCC: Ticarcillin-clavulanate,>=20,,>=15  <20,<=14,Enterobacterales
 11,CZO: Cefazolin,>=23,,>=20  <=22,<=19,Enterobacterales
 12,CZO: Cefazolin,>=15,,,<=14,Enterobacterales
 13,CPT: Ceftaroline,>=23,,>=20  <23,<=19,Enterobacterales
@@ -18,24 +18,24 @@
 16,CRO: Ceftriaxone,>=23,,>=20  <23,<=19,Enterobacterales
 17,CTT: Cefotetan,>=16,,>=13  <16,<=12,Enterobacterales
 18,FOX: Cefoxitin,>=18,,>=15  <18,<=14,Enterobacterales
-19,: Cefuroxime (parenteral),>=18,,>=15  <18,<=14,Enterobacterales
+19,CXM: Cefuroxime (parenteral),>=18,,>=15  <18,<=14,Enterobacterales
 20,CAZ: Ceftazidime,>=21,,>=18  <21,<=17,Enterobacterales
 21,MAN: Cefamandole,>=18,,>=15  <18,<=14,Enterobacterales
-22,: Cefmetazole,>=16,,>=13  <16,<=12,Enterobacterales
-23,: Cefonicid,>=18,,>=15  <18,<=14,Enterobacterales
+22,CMZ: Cefmetazole,>=16,,>=13  <16,<=12,Enterobacterales
+23,CID: Cefonicid,>=18,,>=15  <18,<=14,Enterobacterales
 24,CFP: Cefoperazone,>=21,,>=16  <=20,<=15,Enterobacterales
 25,CZX: Ceftizoxime,>=25,,>=22  <25,<=21,Enterobacterales
 26,MOX: Moxalactam,>=23,,>=15  <23,<=14,Enterobacterales
-27,: Cefiderocol,>=16,,>=12  <16,<=11,Enterobacterales
+27,FDC: Cefonicid,>=16,,>=12  <16,<=11,Enterobacterales
 28,CXM: Cefuroxime,>=23,,>=15  <23,<=14,Enterobacterales
-29,: Cefazolin (surrogate test for oral cephalosporins and uncomplicated UTIs),>=15,,,<=14,Enterobacterales
-30,: Loracarbef,>=18,,>=15  <18,<=14,Enterobacterales
+29,CZO: Cefazolin (surrogate test for oral cephalosporins and uncomplicated UTIs),>=15,,,<=14,Enterobacterales
+30,LOR: Loracarbef,>=18,,>=15  <18,<=14,Enterobacterales
 31,CEC: Cefaclor,>=18,,>=15  <18,<=14,Enterobacterales
-32,: Cefdinir,>=20,,>=19  <20,<=16,Enterobacterales
+32,CDR: Cefdinir,>=20,,>=19  <20,<=16,Enterobacterales
 33,CFM: Cefixime,>=19,,>=16  <19,<=15,Enterobacterales
 34,CPD: Cefpodoxime,>=21,,>=18  <21,<=17,Enterobacterales
-35,: Cefprozil,>=18,,>=15  <18,<=14,Enterobacterales
-36,: Cefetamet,>=18,,>=15  <18,<=14,Enterobacterales
+35,CPR: Cefprozil,>=18,,>=15  <18,<=14,Enterobacterales
+36,CAT: Cefetamet,>=18,,>=15  <18,<=14,Enterobacterales
 37,CTB: Ceftibuten,>=21,,>=18  <21,<=17,Enterobacterales
 38,ATM: Aztreonam,>=21,,>=18  <21,<=17,Enterobacterales
 39,DOR: Doripenem,>=23,,>=20  <23,<=19,Enterobacterales
@@ -43,7 +43,7 @@
 41,IPM: Imipenem,>=23,,>=20  <23,<=19,Enterobacterales
 42,MEM: Meropenem,>=23,,>=20  <23,<=19,Enterobacterales
 43,COL: Colistin,,,,,Enterobacterales
-44,: Polymyxin B,,,,,Enterobacterales
+44,POL: Polymyxin B,,,,,Enterobacterales
 45,GEN: Gentamicin,>=15,,>=13  <15,<=12,Enterobacterales
 46,TOB: Tobramycin,>=15,,>=13  <15,<=12,Enterobacterales
 47,AMK: Amikacin,>=17,,>=15  <17,<=14,Enterobacterales
@@ -56,40 +56,40 @@
 54,MNO: Minocycline,>=16,,>=13  <=15,<=12,Enterobacterales
 55,CIP: Ciprofloxacin,>=26,,>=22  <26,<=21,Enterobacterales
 56,LVX: Levofloxacin,>=21,,>=17  <21,<=16,Enterobacterales
-57,: Cinoxacin,>=19,,>=15  <19,<=14,Enterobacterales
+57,CIN: Cinoxacin,>=19,,>=15  <19,<=14,Enterobacterales
 58,ENX: Enoxacin,>=18,,>=15  <18,<=14,Enterobacterales
 59,GAT: Gatifloxacin,>=18,,>=15  <18,<=14,Enterobacterales
-60,: Gemifloxacin,>=20,,>=16  <=19,<=15,Enterobacterales
-61,: Grepafloxacin,>=18,,>=15  <=17,<=14,Enterobacterales
+60,GEM: Gemifloxacin,>=20,,>=16  <=19,<=15,Enterobacterales
+61,GRX: Grepafloxacin,>=18,,>=15  <=17,<=14,Enterobacterales
 62,LOM: Lomefloxacin,>=22,,>=19  <22,<=18,Enterobacterales
 63,NAL: Nalidixic acid,>=19,,>=14  <=18,<=13,Enterobacterales
 64,NOR: Norfloxacin,>=17,,>=13  <=16,<=12,Enterobacterales
 65,OFX: Ofloxacin,>=16,,>=13  <16,<=12,Enterobacterales
-66,: Fleroxacin,>=19,,>=16  <=19,<=15,Enterobacterales
+66,FLE: Fleroxacin,>=19,,>=16  <=19,<=15,Enterobacterales
 67,CIP: Ciprofloxacin,>=31,,>=21  <31,<=20,Enterobacterales
 68,LVX: Levofloxacin,,,,,Enterobacterales
 69,OFX: Ofloxacin,,,,,Enterobacterales
-70,: Pefloxacin (surrogate test for ciprofloxacin),>=24,,,<=23,Enterobacterales
-71,: Trimethoprim-sulfamethoxazole,>=16,,>=11  <=15,<=10,Enterobacterales
+70,PEF: Pefloxacin (surrogate test for ciprofloxacin),>=24,,,<=23,Enterobacterales
+71,SXT: Trimethoprim-sulfamethoxazole,>=16,,>=11  <=15,<=10,Enterobacterales
 72,SSS: Sulfonamides,>=17,,>=13  <=16,<=12,Enterobacterales
 73,TMP: Trimethoprim,>=16,,>=11  <=15,<=10,Enterobacterales
 74,CHL: Chloramphenicol,>=18,,>=13  <=17,<=12,Enterobacterales
 75,FOS: Fosfomycin,>=16,,>=13  <=15,<=12,Enterobacterales
 76,NIT: Nitrofurantoin,>=17,,>=15  <=16,<=14,Enterobacterales
 77,PIP: Piperacillin,>=21,,>=15  <21,<=14,Pseudomonas aeruginosa
-78,: Piperacillin-tazobactam,>=21,,>=15  <21,<=14,Pseudomonas aeruginosa
-79,: Ceftolozane-avibactam,>=21,,,<=20,Pseudomonas aeruginosa
-80,: Ceftazidime-tazobactam,>=21,,>=17  <21,<=16,Pseudomonas aeruginosa
-81,: Imipenem-relebactam,>=23,,>=20  <23,<=19,Pseudomonas aeruginosa
-82,: Ticarcillin-clavulanate,>=24,,>=16  <24,<=15,Pseudomonas aeruginosa
+78,TZP: Piperacillin-tazobactam,>=21,,>=15  <21,<=14,Pseudomonas aeruginosa
+79,CZA: Ceftazidime-avibactam,>=21,,,<=20,Pseudomonas aeruginosa
+80,CZT: Ceftolozane-tazobactam,>=21,,>=17  <21,<=16,Pseudomonas aeruginosa
+81,IMR: Imipenem-relebactam,>=23,,>=20  <23,<=19,Pseudomonas aeruginosa
+82,TCC: Ticarcillin-clavulanate,>=24,,>=16  <24,<=15,Pseudomonas aeruginosa
 83,CAZ: Ceftazidime,>=18,,>=15  <18,<=14,Pseudomonas aeruginosa
 84,FEP: Cefepime,>=18,,>=15  <18,<=14,Pseudomonas aeruginosa
-85,: Cefiderocol,>=18,,>=13  <18,<=12,Pseudomonas aeruginosa
+85,FDC: Cefonicid,>=18,,>=13  <18,<=12,Pseudomonas aeruginosa
 86,ATM: Aztreonam,>=22,,>=16  <22,<=15,Pseudomonas aeruginosa
 87,DOR: Doripenem,>=19,,>=16  <19,<=15,Pseudomonas aeruginosa
 88,IPM: Imipenem,>=19,,>=16  <19,<=15,Pseudomonas aeruginosa
 89,MEM: Meropenem,>=19,,>=16  <19,<=15,Pseudomonas aeruginosa
-90,: Colistin or polymyxin B,,,,,Pseudomonas aeruginosa
+90,COP/POL: Colistin or polymyxin B,,,,,Pseudomonas aeruginosa
 91,GEN: Gentamicin,>=15,,>=13  <15,<=12,Pseudomonas aeruginosa
 92,TOB: Tobramycin,>=15,,>=13  <15,<=12,Pseudomonas aeruginosa
 93,AMK: Amikacin,>=17,,>=15  <17,<=14,Pseudomonas aeruginosa
@@ -101,18 +101,18 @@
 99,OFX: Ofloxacin,>=16,,>=13 <16,<=12,Pseudomonas aeruginosa
 100,GAT: Gatifloxacin,>=18,,>=13 <18,<=14,Pseudomonas aeruginosa
 101,PIP: Piperacillin,>=21,,>=18 <20,<=17,Acinetobacter spp.
-102,: Ampicillin-sulbactam,>=15,,>=12 <14,<=11,Acinetobacter spp.
-103,: Piperacillin-tazobactam,>=21,,>=18 <20,<=17,Acinetobacter spp.
-104,: Ticarcillin-clavulanate,>=20,,>=15 <19,<=14,Acinetobacter spp.
+102,SAM: Ampicillin-sulbactam,>=15,,>=12 <14,<=11,Acinetobacter spp.
+103,TZP: Piperacillin-tazobactam,>=21,,>=18 <20,<=17,Acinetobacter spp.
+104,TCC: Ticarcillin-clavulanate,>=20,,>=15 <19,<=14,Acinetobacter spp.
 105,CAZ: Ceftazidime,>=18,,>=15 <17,<=14,Acinetobacter spp.
 106,FEP: Cefepime,>=18,,>=15 <17,<=14,Acinetobacter spp.
 107,CTX: Cefotaxime,>=23,,>=15 <22,<=14,Acinetobacter spp.
 108,CRO: Ceftriaxone,>=21,,>=14 <20,<=13,Acinetobacter spp.
-109,: Cefiderocol,>=15,,>=11 <14,<=10,Acinetobacter spp.
+109,FDC: Cefonicid,>=15,,>=11 <14,<=10,Acinetobacter spp.
 110,DOR: Doripenem,>=18,,>=15 <17,<=14,Acinetobacter spp.
 111,IPM: Imipenem,>=22,,>=19 <21,<=18,Acinetobacter spp.
 112,MEM: Meropenem,>=18,,>=15 <17,<=14,Acinetobacter spp.
-113,: Colistin or polymyxin B,,,,,Acinetobacter spp.
+113,COP/POL: Colistin or polymyxin B,,,,,Acinetobacter spp.
 114,GEN: Gentamicin,>=15,,>=13 <14,<=12,Acinetobacter spp.
 115,TOB: Tobramycin,>=15,,>=13 <14,<=12,Acinetobacter spp.
 116,AMK: Amikacin,>=17,,>=15 <17,<=14,Acinetobacter spp.
@@ -123,20 +123,20 @@
 121,CIP: Ciprofloxacin,>=21,,>=16 <20,<=15,Acinetobacter spp.
 122,LVX: Levofloxacin,>=17,,>=14 <16,<=13,Acinetobacter spp.
 123,GAT: Gatifloxacin,>=18,,>=15 <17,<=14,Acinetobacter spp.
-124,: Trimethoprim- sulfamethoxazole,>=16,,>=11 <15,<=10,Acinetobacter spp.
-125,: Ticarcillin-clavulanate,,,,,Burkholderia cepacia complex
+124,SXT: Trimethoprim- sulfamethoxazole,>=16,,>=11 <15,<=10,Acinetobacter spp.
+125,TCC: Ticarcillin-clavulanate,,,,,Burkholderia cepacia complex
 126,CAZ: Ceftazidime,>=21,,>=18 <20,<=17,Burkholderia cepacia complex
 127,MEM: Meropenem,>=20,,>=16 <19,<=15,Burkholderia cepacia complex
 128,MNO: Minocycline,>=19,,>=15 <18,<=14,Burkholderia cepacia complex
 129,LVX: Levofloxacin,,,,,Burkholderia cepacia complex
-130,: Trimethoprim- sulfamethoxazole,>=16,,>=11 <15,<=10,Burkholderia cepacia complex
+130,SXT: Trimethoprim- sulfamethoxazole,>=16,,>=11 <15,<=10,Burkholderia cepacia complex
 131,CHL: Chloramphenicol,,,,,Burkholderia cepacia complex
-132,: Ticarcillin-clavulanate,,,,,Stenotrophomonas maltophilia
+132,TCC: Ticarcillin-clavulanate,,,,,Stenotrophomonas maltophilia
 133,CAZ: Ceftazidime,,,,,Stenotrophomonas maltophilia
-134,: Cefiderocol,>=17,,>=13 <16,<=12,Stenotrophomonas maltophilia
+134,FDC: Cefonicid,>=17,,>=13 <16,<=12,Stenotrophomonas maltophilia
 135,MNO: Minocycline,>=19,,>=15 <18,<=14,Stenotrophomonas maltophilia
 136,LVX: Levofloxacin,>=17,,>=14 <16,<=13,Stenotrophomonas maltophilia
-137,: Trimethoprim- sulfamethoxazole,>=16,,>=11 <15,<=10,Stenotrophomonas maltophilia
+137,SXT: Trimethoprim- sulfamethoxazole,>=16,,>=11 <15,<=10,Stenotrophomonas maltophilia
 138,CHL: Chloramphenicol,,,,,Stenotrophomonas maltophilia
 139,: Penicillin,>=15,,,<=14,Enterococcus spp.
 140,AMP: Ampicillin,>=17,,,<=16,Enterococcus spp.
@@ -157,31 +157,31 @@
 155,RIF: Rifampin,>=20,,,<=16,Enterococcus spp.
 156,FOS: Fosfomycin,>=16,,,<=12,Enterococcus spp.
 157,CHL: Chloramphenicol,>=18,,,<=12,Enterococcus spp.
-158,: Quinupristin-dalfopristin,>=19,,,<=15,Enterococcus spp.
+158,QDA: Quinupristin-dalfopristin,>=19,,,<=15,Enterococcus spp.
 159,LNZ: Linezolid,>=23,,,<=20,Enterococcus spp.
 160,TZD: Tedizolid,,,,,Enterococcus spp.
 161,AMP: Ampicillin,>=22,,>=19 <21,<=18,Haemophilus influenzae and Haemophilus parainfluenzae
-162,: Ampicillin-sulbactam,>=20,,,<=19,Haemophilus influenzae and Haemophilus parainfluenzae
-163,: Amoxicillin-clavulanate,>=20,,,<=19,Haemophilus influenzae and Haemophilus parainfluenzae
-164,: Piperacillin-tazobactam,>=21,,,,Haemophilus influenzae and Haemophilus parainfluenzae
+162,SAM: Ampicillin-sulbactam,>=20,,,<=19,Haemophilus influenzae and Haemophilus parainfluenzae
+163,AMC: Amoxicillin-clavulanate,>=20,,,<=19,Haemophilus influenzae and Haemophilus parainfluenzae
+164,TZP: Piperacillin-tazobactam,>=21,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 165,CTX: Cefotaxime,>=26,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 166,CAZ: Ceftazidime,>=26,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 167,CRO: Ceftriaxone,>=26,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 168,CXM: Cefuroxime,>=20,,>=17 <20,<=16,Haemophilus influenzae and Haemophilus parainfluenzae
 169,CPT: Ceftaroline,>=30,,,,Haemophilus influenzae and Haemophilus parainfluenzae
-170,: Cefonicid,>=20,,>=17 <20,<=16,Haemophilus influenzae and Haemophilus parainfluenzae
+170,CID: Cefonicid,>=20,,>=17 <20,<=16,Haemophilus influenzae and Haemophilus parainfluenzae
 171,MAN: Cefamandole,,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 172,FEP: Cefepime,>=26,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 173,CZX: Ceftizoxime,>=26,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 174,CEC: Cefaclor,>=20,,>=17 <19,,Haemophilus influenzae and Haemophilus parainfluenzae
-175,: Cefprozil,>=18,,>=15 <17,,Haemophilus influenzae and Haemophilus parainfluenzae
-176,: Cefdinir,>=20,,,,Haemophilus influenzae and Haemophilus parainfluenzae
+175,CPR: Cefprozil,>=18,,>=15 <17,,Haemophilus influenzae and Haemophilus parainfluenzae
+176,CDR: Cefdinir,>=20,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 177,CFM: Cefixime,>=21,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 178,CPD: Cefpodoxime,>=21,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 179,CXM: Cefuroxime,>=20,,>=17 <19,,Haemophilus influenzae and Haemophilus parainfluenzae
-180,: Loracarbef,>=19,,>=16 <18,,Haemophilus influenzae and Haemophilus parainfluenzae
+180,LOR: Loracarbef,>=19,,>=16 <18,,Haemophilus influenzae and Haemophilus parainfluenzae
 181,CTB: Ceftibuten,>=28,,,,Haemophilus influenzae and Haemophilus parainfluenzae
-182,: Cefetamet,>=18,,>=15 <17,,Haemophilus influenzae and Haemophilus parainfluenzae
+182,CAT: Cefetamet,>=18,,>=15 <17,,Haemophilus influenzae and Haemophilus parainfluenzae
 183,ATM: Aztreonam,>=26,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 184,MEM: Meropenem,>=20,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 185,ETP: Ertapenem,>=19,,,,Haemophilus influenzae and Haemophilus parainfluenzae
@@ -193,14 +193,14 @@
 191,CIP: Ciprofloxacin,>=21,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 192,LVX: Levofloxacin,>=17,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 193,MFX: Moxifloxacin,>=18,,,,Haemophilus influenzae and Haemophilus parainfluenzae
-194,: Gemifloxacin,>=18,,,,Haemophilus influenzae and Haemophilus parainfluenzae
+194,GEM: Gemifloxacin,>=18,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 195,GAT: Gatifloxacin,>=18,,,,Haemophilus influenzae and Haemophilus parainfluenzae
-196,: Grepafloxacin,>=24,,,,Haemophilus influenzae and Haemophilus parainfluenzae
+196,GRX: Grepafloxacin,>=24,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 197,LOM: Lomefloxacin,>=22,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 198,OFX: Ofloxacin,>=16,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 199,SPX: Sparfloxacin,,,,,Haemophilus influenzae and Haemophilus parainfluenzae
 200,TVA: Trovafloxacin,>=22,,,,Haemophilus influenzae and Haemophilus parainfluenzae
-201,: Fleroxacin,>=19,,,,Haemophilus influenzae and Haemophilus parainfluenzae
-202,: Trimethoprim-Sulfamethoxazole,>=16,,>=11 <15,,Haemophilus influenzae and Haemophilus parainfluenzae
+201,FLE: Fleroxacin,>=19,,,,Haemophilus influenzae and Haemophilus parainfluenzae
+202,SXT: Trimethoprim-sulfamethoxazole,>=16,,>=11 <15,,Haemophilus influenzae and Haemophilus parainfluenzae
 203,CHL: Chloramphenicol,>=29,,>=28 <28,,Haemophilus influenzae and Haemophilus parainfluenzae
 204,RIF: Rifampin,>=20,,>=17 <19,,Haemophilus influenzae and Haemophilus parainfluenzae
