@@ -27,6 +27,7 @@ class PelletsDetector:
         self.med_loc = None
         self.med_rad = None
         self.inhibition_zone_diam = None
+        self.pellets = None
 
     def process_image(self, image_path):
         if  image_path is not None:
@@ -51,6 +52,7 @@ class PelletsDetector:
 
             self.med_loc = [(float(self.med_circles[0, i, 0]), float(self.med_circles[0, i, 1])) for i in range(len(self.med_circles[0]))]
             self.med_rad = [int(np.floor(self.med_circles[0, i, -1])) for i in range(len(self.med_circles[0]))]
+            self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=200, normalize_size=False) for i in range(len(self.med_circles[0]))]
             return self.img_crop
         else: return("image not found")
     
@@ -329,7 +331,7 @@ def post_med_data():
 def get_med_info():
     if pellets_detector.med_loc is not None and pellets_detector.med_rad is not None:
         # med_json = [{'x': loc[0], 'y': loc[1], 'radius': rad, 'predict_diameter': diam} for loc, rad, diam in zip(pellets_detector.med_loc, pellets_detector.med_rad, pellets_detector.inhibition_zone_diam)]
-        med_data = [(loc[0], loc[1], diam) for loc, diam in zip(pellets_detector.med_loc, pellets_detector.inhibition_zone_pixels)]
+        med_data = [(loc[0], loc[1], diam, pellets.tolist()) for loc, diam, pellets in zip(pellets_detector.med_loc, pellets_detector.inhibition_zone_pixels, pellets_detector.pellets)]
         print(med_data)
         return (med_data), 200
     else:
