@@ -10,7 +10,7 @@ from flask_cors import CORS
 from PIL import Image
 from io import BytesIO
 from datetime import datetime
-
+import psycopg2
 
 
 import PlateDetector
@@ -27,6 +27,7 @@ class PelletsDetector:
         self.med_loc = None
         self.med_rad = None
         self.inhibition_zone_diam = None
+        self.pellets = None
 
     def process_image(self, image_path):
         if  image_path is not None:
@@ -51,6 +52,7 @@ class PelletsDetector:
 
             self.med_loc = [(float(self.med_circles[0, i, 0]), float(self.med_circles[0, i, 1])) for i in range(len(self.med_circles[0]))]
             self.med_rad = [int(np.floor(self.med_circles[0, i, -1])) for i in range(len(self.med_circles[0]))]
+            self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=200, normalize_size=False) for i in range(len(self.med_circles[0]))]
             return self.img_crop
         else: return("image not found")
     
@@ -214,7 +216,7 @@ class Interpretator:
         try:
             med_index = df.loc[(df['Antimicrobial Agent'] == input_b) & (df['Bacteria'] == input_c)].index.astype(int)[0]
         except IndexError:
-            return f'No SIR info of {input_b}', '', input_a
+            return "Antimicrobial or Bacteria not found",'', input_a
         
         if pd.isna(s[med_index]) or pd.isna(i[med_index]) or pd.isna(r[med_index]):
             return "Data is NaN for the given index",'', input_a
@@ -241,7 +243,12 @@ class Interpretator:
 app = Flask(__name__)
 #Make CORS Potocorrelation
 CORS(app)
-
+conn = psycopg2.connect(
+    dbname="astAutomation",
+    user="postgres",
+    password="1112",
+    host="localhost"
+)
 #Create Class Object for replete
 pellets_detector = PelletsDetector()
 interpretion = Interpretator()
@@ -324,48 +331,42 @@ def post_med_data():
         # If an error occurs during processing, return an error response
         return jsonify({"error": str(e)}), 500
   
-
+import base64
 @app.route('/api/med_info', methods=['GET'])
 def get_med_info():
     if pellets_detector.med_loc is not None and pellets_detector.med_rad is not None:
         # med_json = [{'x': loc[0], 'y': loc[1], 'radius': rad, 'predict_diameter': diam} for loc, rad, diam in zip(pellets_detector.med_loc, pellets_detector.med_rad, pellets_detector.inhibition_zone_diam)]
-        med_data = [(loc[0], loc[1], diam) for loc, diam in zip(pellets_detector.med_loc, pellets_detector.inhibition_zone_pixels)]
+        
+        images_data = []
+        for img_array in pellets_detector.pellets:
+            # Convert the NumPy array to an image
+            img = cv2.cvtColor(img_array, cv2.COLOR_GRAY2RGB)
+            # Convert the image to a byte array
+            _, img_encoded = cv2.imencode('.png', img)
+            # Encode the byte array as a base64 string
+            img_base64 = base64.b64encode(img_encoded).decode('utf-8')
+            # Add the base64 string to the list
+            images_data.append(img_base64)
+        med_data = [(loc[0], loc[1], diam, images_data) for loc, diam, images_data in zip(pellets_detector.med_loc, pellets_detector.inhibition_zone_pixels, images_data)]
         print(med_data)
         return (med_data), 200
     else:
         return jsonify({'error': 'Medicine information not available. Please Process an image first.'}), 404
     
-# class DataPoint(db.Model):
-#     astId = db.Column(db.String(50), primary_key=True)
-#     bacteria = db.Column(db.String(50))
-#     name = db.Column(db.String(50))
-#     newDataPoint = db.Column(db.String(50))
-#     added_at = db.Column(db.TIMESTAMP, default=datetime.now)
+@app.route('/api/add_data', methods=['POST'])
+def add_data():
+    try:
+        new_data = request.get_json()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO public."SummaryResult"("userName", "bacteriasID", "antibioticsID", "astID", "addedAt") VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)', 
+                    (new_data['userName'], new_data['bacteriasID'], new_data['antibioticsID'], new_data['astID']))
+        conn.commit()
+        cur.close()
+        return jsonify({"message": "Data added successfully"})
+    except Exception as e:
+        conn.rollback()
+        return jsonify({"error": str(e)})
 
-#     def __repr__(self):
-#         return f"<DataPoint {self.astId}, {self.bacteria}, {self.name}, {self.newDataPoint}, {self.added_at}>"
-
-
-# @app.route('/add_data', methods=['POST'])
-
-# def add_data():
-#     data = request.json
-#     astId = data.get('astId')
-#     bacteria = data.get('bacteria')
-#     name = data.get('name')
-#     newDataPoint = data.get('newDataPoint')
-
-#     if not all([astId, bacteria, name, newDataPoint]):
-#         return jsonify({'error': 'Missing data parameters'}), 400
-
-#     # Add current timestamp
-#     added_at = datetime.now()
-
-#     new_data_point = DataPoint(astId=astId, bacteria=bacteria, name=name, newDataPoint=newDataPoint, added_at=added_at)
-#     db.session.add(new_data_point)
-#     db.session.commit()
-
-#     return jsonify({'message': 'Data added successfully'}), 201
 
 if __name__ == '__main__':
     app.run(debug=True)
