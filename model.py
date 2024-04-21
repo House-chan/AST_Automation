@@ -217,7 +217,7 @@ class Interpretator:
         try:
             med_index = df.loc[(df['Antimicrobial Agent'] == input_b) & (df['Bacteria'] == input_c)].index.astype(int)[0]
         except IndexError:
-            return f"Antimicrobial or Bacteria not found {input_b}",'', input_a
+            return f"No data for interpretion SIR {input_b}",'', input_a
         
         if pd.isna(s[med_index]) or pd.isna(i[med_index]) or pd.isna(r[med_index]):
             return "Data is NaN for the given index",'', input_a
