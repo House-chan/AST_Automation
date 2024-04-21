@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import pandas as pd
+import psycopg2
+import json
 from os import path
 from copy import copy
 from scipy.ndimage import median_filter
@@ -10,7 +12,6 @@ from flask_cors import CORS
 from PIL import Image
 from io import BytesIO
 from datetime import datetime
-import psycopg2
 
 
 import PlateDetector
@@ -352,14 +353,41 @@ def get_med_info():
 @app.route('/api/add_data', methods=['POST'])
 def add_data():
     try:
+        new_data = request.get_json()
+
+        # Extract values from the input JSON
+        ast_id = new_data['astId']
+        bacteria_name = new_data['bacteria']
+        user_name = new_data['name']
+
+        logs = []
+        for item in new_data['newDataPoint']:
+            antibiotic_name, sir, inhibition_diam = item[0], item[1], item[2]
+            logs.append({
+                'antibioticsName': antibiotic_name,
+                'SIR': sir,
+                'inhibitionDiam': inhibition_diam
+            })
+
+        # Create the final output JSON
+        output_json = {
+            'astID': ast_id,
+            'bacteriasName': bacteria_name,
+            'userName': user_name,
+            'logs': logs
+        }
+
+        # Print the output JSON
+        print(json.dumps(output_json, indent=4))
+        new_data = output_json
+
         conn = psycopg2.connect(
         dbname="astAutomation",
         user="postgres",
         password="1112",
         host="localhost"
         )
-        
-        new_data = request.get_json()
+
         cur = conn.cursor()
 
         with conn.cursor() as cur:
@@ -368,13 +396,14 @@ def add_data():
                 'INSERT INTO public."SummaryResult"("astID", "addedAt", "bacteriasName", "userName")'
                 'VALUES (%s, CURRENT_TIMESTAMP, %s, %s) RETURNING "astID"', 
                 (new_data['astID'], new_data['bacteriasName'], new_data['userName'])
-            )
+                )
 
-            cur.execute(
-                'INSERT INTO public."Log"( "antibioticsName", "SIR", "inhibitionDiam", "astID") '
-                'VALUES (%s, %s, %s, %s)',
-                (new_data['antibioticsName'], new_data['SIR'], new_data['inhibitionDiam'], new_data['astID'])
-            )
+            for item in new_data['logs']:  # Assuming the log data is in an array called 'logs'
+                cur.execute(
+                    'INSERT INTO public."Log"( "antibioticsName", "SIR", "inhibitionDiam", "astID") '
+                    'VALUES (%s, %s, %s, %s)',
+                    (item['antibioticsName'], item['SIR'], item['inhibitionDiam'], new_data['astID'])
+                )
 
             conn.commit()
             return jsonify({"message": "Data added successfully to both tables"})
