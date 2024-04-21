@@ -41,6 +41,7 @@ class PelletsDetector:
                 self.plate_circle = PlateDetector.detect(img)
                 self.plate_radius = self.plate_circle[0, 0, 2]
             except Exception as e:
+                print(e)
                 return str(e)  
 
             self.img_crop = PlateDetector.circle_crop(img, self.plate_circle, pad=0, normalize_size=True)
@@ -216,7 +217,7 @@ class Interpretator:
         try:
             med_index = df.loc[(df['Antimicrobial Agent'] == input_b) & (df['Bacteria'] == input_c)].index.astype(int)[0]
         except IndexError:
-            return "Antimicrobial or Bacteria not found",'', input_a
+            return f"Antimicrobial or Bacteria not found {input_b}",'', input_a
         
         if pd.isna(s[med_index]) or pd.isna(i[med_index]) or pd.isna(r[med_index]):
             return "Data is NaN for the given index",'', input_a
@@ -235,7 +236,7 @@ class Interpretator:
         elif eval(str(input_a) + condition_r):
             print("Condition is R")
             return [input_b, 'R', input_a]
-        else: return "Antimicrobial or Bacteria not found", input_a
+        else: return f"Antimicrobial or Bacteria not found {input_a}"
         
 
 #Define Flask API
@@ -243,12 +244,6 @@ class Interpretator:
 app = Flask(__name__)
 #Make CORS Potocorrelation
 CORS(app)
-conn = psycopg2.connect(
-    dbname="astAutomation",
-    user="postgres",
-    password="1112",
-    host="localhost"
-)
 #Create Class Object for replete
 pellets_detector = PelletsDetector()
 interpretion = Interpretator()
@@ -353,19 +348,41 @@ def get_med_info():
     else:
         return jsonify({'error': 'Medicine information not available. Please Process an image first.'}), 404
     
+    
 @app.route('/api/add_data', methods=['POST'])
 def add_data():
     try:
+        conn = psycopg2.connect(
+        dbname="astAutomation",
+        user="postgres",
+        password="1112",
+        host="localhost"
+        )
+        
         new_data = request.get_json()
         cur = conn.cursor()
-        cur.execute('INSERT INTO public."SummaryResult"("userName", "bacteriasID", "antibioticsID", "astID", "addedAt") VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)', 
-                    (new_data['userName'], new_data['bacteriasID'], new_data['antibioticsID'], new_data['astID']))
-        conn.commit()
-        cur.close()
-        return jsonify({"message": "Data added successfully"})
+
+        with conn.cursor() as cur:
+            # Insert into SummaryResult
+            cur.execute(
+                'INSERT INTO public."SummaryResult"("astID", "addedAt", "bacteriasName", "userName")'
+                'VALUES (%s, CURRENT_TIMESTAMP, %s, %s) RETURNING "astID"', 
+                (new_data['astID'], new_data['bacteriasName'], new_data['userName'])
+            )
+
+            cur.execute(
+                'INSERT INTO public."Log"( "antibioticsName", "SIR", "inhibitionDiam", "astID") '
+                'VALUES (%s, %s, %s, %s)',
+                (new_data['antibioticsName'], new_data['SIR'], new_data['inhibitionDiam'], new_data['astID'])
+            )
+
+            conn.commit()
+            return jsonify({"message": "Data added successfully to both tables"})
+
     except Exception as e:
         conn.rollback()
-        return jsonify({"error": str(e)})
+        print(e)
+        return (f"error{e}")
 
 
 if __name__ == '__main__':
