@@ -3,6 +3,9 @@ import numpy as np
 import pandas as pd
 import psycopg2
 import json
+import os
+from dotenv import load_dotenv
+
 from os import path
 from copy import copy
 from scipy.ndimage import median_filter
@@ -248,6 +251,21 @@ CORS(app)
 #Create Class Object for replete
 pellets_detector = PelletsDetector()
 interpretion = Interpretator()
+load_dotenv()
+
+# Retrieve database credentials from environment variables
+db_host = os.getenv("DB_HOST")
+db_name = os.getenv("DB_NAME")
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+
+conn = psycopg2.connect(
+host=db_host,
+database=db_name,
+user=db_user,
+password=db_password
+)
+
 
 @app.route('/api/process_image', methods=['POST'])
 def process_image():
@@ -381,12 +399,6 @@ def add_data():
         print(json.dumps(output_json, indent=4))
         new_data = output_json
 
-        conn = psycopg2.connect(
-        dbname="astAutomation",
-        user="postgres",
-        password="1112",
-        host="localhost"
-        )
 
         cur = conn.cursor()
 
@@ -413,6 +425,45 @@ def add_data():
         print(e)
         return (f"error{e}")
 
+@app.route('/api/get_data_by_astID', methods=['POST'])
+def get_data_by_astID():
+    data = request.get_json()
+    astID = data['astID']
+    cur = conn.cursor()
+    with conn.cursor() as cur:
+        # Fetch data from SummaryResult
+        cur.execute(
+            """
+            SELECT * 
+            FROM public."SummaryResult" 
+            WHERE "astID" = %s 
+            """, 
+            (astID,)
+        )
+        summary_result_data = cur.fetchone()
+
+        if not summary_result_data:
+            return jsonify({"error": "astID not found"}), 404  # Error handling
+
+        # Fetch logs from Log table
+        cur.execute(
+            """
+            SELECT * 
+            FROM public."Log" 
+            WHERE "astID" = %s 
+            """, 
+            (astID,)
+        )
+
+        log_data = cur.fetchall()
+
+        # Combine the results into a single response
+        response_data = {
+            "summary_result": summary_result_data,
+            "logs": log_data
+        }
+
+        return jsonify(response_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
