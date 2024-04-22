@@ -344,6 +344,22 @@ def post_med_data():
     except Exception as e:
         # If an error occurs during processing, return an error response
         return jsonify({"error": str(e)}), 500
+    
+
+
+@app.route('/api/get_all_gallery', methods=['GET'])
+def get_all_gallery():
+    try:
+        with conn.cursor() as cur:  # Establish database connection 
+            cur.execute('SELECT * FROM public."SummaryResult" ORDER BY "astID" ASC')
+            results = cur.fetchall()
+            # Format results as a list of dictionaries (assuming column names)
+            data = [dict(zip([column[0] for column in cur.description], row)) for row in results]
+            return jsonify(data)  # Return data as JSON
+        
+    except (Exception, psycopg2.Error) as e:
+        print("Error:", e)
+        return jsonify({'error': str(e)}), 500  # Return error on failure
   
 import base64
 @app.route('/api/med_info', methods=['GET'])
@@ -366,7 +382,6 @@ def get_med_info():
         return (med_data), 200
     else:
         return jsonify({'error': 'Medicine information not available. Please Process an image first.'}), 404
-    
     
 @app.route('/api/add_data', methods=['POST'])
 def add_data():
@@ -395,11 +410,7 @@ def add_data():
             'logs': logs
         }
 
-        # Print the output JSON
-        print(json.dumps(output_json, indent=4))
         new_data = output_json
-
-
         cur = conn.cursor()
 
         with conn.cursor() as cur:
@@ -419,51 +430,69 @@ def add_data():
 
             conn.commit()
             return jsonify({"message": "Data added successfully to both tables"})
-
-    except Exception as e:
+        
+    except (Exception, psycopg2.Error) as e:
         conn.rollback()
         print(e)
-        return (f"error{e}")
+        return (f"error{e}", 500)
 
 @app.route('/api/get_data_by_astID', methods=['POST'])
 def get_data_by_astID():
     data = request.get_json()
     astID = data['astID']
-    cur = conn.cursor()
-    with conn.cursor() as cur:
-        # Fetch data from SummaryResult
-        cur.execute(
-            """
-            SELECT * 
-            FROM public."SummaryResult" 
-            WHERE "astID" = %s 
-            """, 
-            (astID,)
-        )
-        summary_result_data = cur.fetchone()
 
-        if not summary_result_data:
-            return jsonify({"error": "astID not found"}), 404  # Error handling
+    try:
+        with conn.cursor() as cur:
+            # Fetch data from SummaryResult
+            cur.execute(
+                """
+                SELECT * 
+                FROM public."SummaryResult" 
+                WHERE "astID" = %s 
+                """, 
+                (astID,)
+            )
+            summary_result_data = cur.fetchone()
 
-        # Fetch logs from Log table
-        cur.execute(
-            """
-            SELECT * 
-            FROM public."Log" 
-            WHERE "astID" = %s 
-            """, 
-            (astID,)
-        )
+            if not summary_result_data:
+                return jsonify({"error": "astID not found"}), 404  # Error handling
 
-        log_data = cur.fetchall()
+            # Fetch logs from Log table
+            cur.execute(
+                """
+                SELECT * 
+                FROM public."Log" 
+                WHERE "astID" = %s 
+                """, 
+                (astID,)
+            )
 
-        # Combine the results into a single response
-        response_data = {
-            "summary_result": summary_result_data,
-            "logs": log_data
-        }
+            log_data = cur.fetchall()
 
-        return jsonify(response_data)
+            # Format the logs data
+            # Combine the results into a single response
+            print(log_data)
+            response_data = {
+                "astID": summary_result_data[0],
+                "date": summary_result_data[1].strftime("%d %B %Y"),  # Format date
+                "bacteriasName": summary_result_data[2],
+                "userName": summary_result_data[3],
+                "logs": [
+                    [
+                        log_entry[3],  # antibioticsName
+                        log_entry[1],  # SIR
+                        log_entry[2],  # inhibitionDiam
+                        # Leave out "astID" since it's redundant
+                    ] for log_entry in log_data
+                ]
+            }
+
+            # Return the formatted JSON response
+            return jsonify(response_data)
+    except (Exception, psycopg2.Error) as e:
+        conn.rollback()
+        return jsonify({"error": "Database error occurred"}), 500  # Internal Server Error
+
 
 if __name__ == '__main__':
     app.run(debug=True)
