@@ -39,7 +39,8 @@ class PelletsDetector:
             # Convert to grayscale
             # img = cv2.cvtColor(image_cv, cv2.COLOR_BGR2GRAY)
                         # img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-            img = PlateDetector.resize(img, 2000)
+            if len(img) >= 2000:
+                img = PlateDetector.resize(img, 2000)
 
             try:
                 self.plate_circle = PlateDetector.detect(img)
@@ -495,4 +496,4 @@ def get_data_by_astID():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',port=5000,debug=True)
