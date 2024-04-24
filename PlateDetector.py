@@ -39,7 +39,6 @@ def detect(image):
     circles = cv2.HoughCircles(
         erosion, cv2.HOUGH_GRADIENT, dp=1, minDist=60, param1=120, param2=100, minRadius=minRadius, maxRadius=maxRadius
     )
-
     try:
         # Your processing code here
         
@@ -52,13 +51,43 @@ def detect(image):
             # biggest_circles[0,0,2] = biggest_circles[0,0,2] - 40
             return biggest_circles
         else:
-            return None
+           
+            return  detect_sec(image)
+
+    except cv2.error as e:
+        print("An OpenCV error occurred:", e)
+        return "An OpenCV error occurred:", e  # Or handle the error differently
 
     except Exception as e:
-        # Handle any exception that occurred during processing
-        print(f"An error occurred during plate detector: {str(e)}")
-        return None
+        print("No Plate detected:", e)
+        return "No Plate detected:", e
 
+
+def detect_sec(image):
+    # determine the max and min size of the plate
+    maxRadius = int(0.9*max(image.shape)/2)
+    minRadius = int(0.1*max(image.shape)/2)
+
+    # decrease the detail of the image.
+    kernel2 = np.ones((5, 5), np.uint8)
+    blurred_image = cv2.GaussianBlur(image, (5, 5), 0)
+    iter = 4
+    dilation = cv2.dilate(blurred_image, kernel2, iterations=iter)
+    erosion = cv2.erode(dilation, kernel2, iterations=iter)
+    
+    # Use the Circular Hough Transform to detect the biggest circle
+    circles = cv2.HoughCircles(
+        erosion, cv2.HOUGH_GRADIENT, dp=1, minDist=60, param1=80, param2=100, minRadius=minRadius, maxRadius=maxRadius
+    )
+
+    if circles is not None:
+        # Sort by radius and get the largest circle
+        indx = np.argsort(circles[:, :, -1])
+        biggest_circles = circles[:, indx[:, -1]]
+
+        # Make circle a bit smaller
+        # biggest_circles[0,0,2] = biggest_circles[0,0,2] - 40
+        return biggest_circles
 
 def circle_crop(image, circle, pad=0, normalize_size=True):
     

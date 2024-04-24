@@ -42,11 +42,11 @@ class PelletsDetector:
             if len(img) >= 2000:
                 img = PlateDetector.resize(img, 2000)
 
-            try:
                 self.plate_circle = PlateDetector.detect(img)
+            try:
                 self.plate_radius = self.plate_circle[0, 0, 2]
             except Exception as e:
-                print(e)
+                print('asdsads',e)
                 return str(e)  
 
             self.img_crop = PlateDetector.circle_crop(img, self.plate_circle, pad=0, normalize_size=True)
