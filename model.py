@@ -41,24 +41,28 @@ class PelletsDetector:
                         # img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
             if len(img) >= 2000:
                 img = PlateDetector.resize(img, 2000)
-
-                self.plate_circle = PlateDetector.detect(img)
             try:
+                self.plate_circle = PlateDetector.detect(img)
                 self.plate_radius = self.plate_circle[0, 0, 2]
             except Exception as e:
                 print('asdsads',e)
                 return str(e)  
 
-            self.img_crop = PlateDetector.circle_crop(img, self.plate_circle, pad=0, normalize_size=True)
-            self.med_circles = MedicineDetector.detect(self.img_crop, pad=0)
+            try:
+                self.img_crop = PlateDetector.circle_crop(img, self.plate_circle, pad=0, normalize_size=True)
+                self.med_circles = MedicineDetector.detect(self.img_crop, pad=0)
+                plate_radius_real = 6.35 / 2
+                self.scale_factor = plate_radius_real / np.mean(self.med_circles[0, :, 2])
 
-            plate_radius_real = 6.35 / 2
-            self.scale_factor = plate_radius_real / self.med_circles[0, 0, 2]
+
+                self.med_loc = [(float(self.med_circles[0, i, 0]), float(self.med_circles[0, i, 1])) for i in range(len(self.med_circles[0]))]
+                self.med_rad = [int(np.floor(self.med_circles[0, i, -1])) for i in range(len(self.med_circles[0]))]
+                self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=200, normalize_size=False) for i in range(len(self.med_circles[0]))]
+            except Exception as e:
+                print('asdeewewqe2qwesads',e)
+                return str(e)  
 
 
-            self.med_loc = [(float(self.med_circles[0, i, 0]), float(self.med_circles[0, i, 1])) for i in range(len(self.med_circles[0]))]
-            self.med_rad = [int(np.floor(self.med_circles[0, i, -1])) for i in range(len(self.med_circles[0]))]
-            self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=200, normalize_size=False) for i in range(len(self.med_circles[0]))]
             return self.img_crop
         else: return("image not found")
     
