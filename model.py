@@ -45,7 +45,7 @@ class PelletsDetector:
                 self.plate_circle = PlateDetector.detect(img)
                 self.plate_radius = self.plate_circle[0, 0, 2]
             except Exception as e:
-                print('asdsads',e)
+                print('PlateDetector Error',e)
                 return str(e)  
 
             try:
@@ -59,7 +59,7 @@ class PelletsDetector:
                 self.med_rad = [int(np.floor(self.med_circles[0, i, -1])) for i in range(len(self.med_circles[0]))]
                 self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=200, normalize_size=False) for i in range(len(self.med_circles[0]))]
             except Exception as e:
-                print('asdeewewqe2qwesads',e)
+                print('MedicineDetector Error',e)
                 return str(e)  
 
 
