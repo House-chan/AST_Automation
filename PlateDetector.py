@@ -69,15 +69,26 @@ def detect_sec(image):
     minRadius = int(0.1*max(image.shape)/2)
 
     # decrease the detail of the image.
-    kernel2 = np.ones((5, 5), np.uint8)
-    blurred_image = cv2.GaussianBlur(image, (5, 5), 0)
+    kernel2 = np.ones((3, 2), np.uint8)
+    blurred_image = cv2.GaussianBlur(image, (3, 3), 0)
     iter = 2
     dilation = cv2.dilate(blurred_image, kernel2, iterations=iter)
     erosion = cv2.erode(dilation, kernel2, iterations=iter)
-    
+
+    # Calculate gradients in x and y directions
+    grad_x = cv2.Sobel(erosion, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y = cv2.Sobel(erosion, cv2.CV_64F, 0, 1, ksize=3)  
+
+    # Convert gradients back to uint8 for combining and displaying
+    abs_grad_x = cv2.convertScaleAbs(grad_x)
+    abs_grad_y = cv2.convertScaleAbs(grad_y)
+
+    # Combine gradients 
+    grad = cv2.addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0)
+
     # Use the Circular Hough Transform to detect the biggest circle
     circles = cv2.HoughCircles(
-        erosion, cv2.HOUGH_GRADIENT, dp=1, minDist=60, param1=60, param2=80, minRadius=minRadius, maxRadius=maxRadius
+        grad, cv2.HOUGH_GRADIENT, dp=1, minDist=49, param1=80, param2=200, minRadius=minRadius, maxRadius=maxRadius
     )
     try:
         if circles is not None:

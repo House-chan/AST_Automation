@@ -26,7 +26,7 @@ def detect(img, pad=0):
         detected_circles[:,:,2] = detected_circles[:,:,2] + pad
 
         if len(detected_circles[0]) <= 1:
-            return detect_sec(img)
+            return detect_sec(img, pad)
 
         return detected_circles
     
@@ -36,7 +36,7 @@ def detect(img, pad=0):
 
     except Exception as e:
         print("No medicine detected:", e)
-        return "No medicine detected:", e
+        return detect_sec(img, pad)
     
 
 
