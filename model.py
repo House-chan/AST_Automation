@@ -57,7 +57,7 @@ class PelletsDetector:
 
                 self.med_loc = [(float(self.med_circles[0, i, 0]), float(self.med_circles[0, i, 1])) for i in range(len(self.med_circles[0]))]
                 self.med_rad = [int(np.floor(self.med_circles[0, i, -1])) for i in range(len(self.med_circles[0]))]
-                self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=200, normalize_size=False) for i in range(len(self.med_circles[0]))]
+                self.pellets = [PlateDetector.circle_crop(self.img_crop, self.med_circles[0][i].reshape((1, 1, -1)), pad=150, normalize_size=False) for i in range(len(self.med_circles[0]))]
             except Exception as e:
                 print('MedicineDetector Error',e)
                 return str(e)  
@@ -167,20 +167,24 @@ class PelletsDetector:
             cp_count = 0
             fake_last_index = -1
 
-            for (index_value, index)  in zip(change_points, range(len(change_points))):
-                if (index == 0) : continue
-                else : print(y[index_value] - y[index_value -1], index)
-                if (y[index_value] - y[index_value - 1] <= 0 and cp_status) : continue
-                if ((y[index_value] - y[index_value - 1] <= 0) and not cp_status) : 
-                    print(index_value)
+        for (index_value, index)  in zip(change_points, range(len(change_points))):
+            if (index == 0) : continue
+            else : print(y[index_value] - y[index_value -1], index)
+            previous_index_value = change_points[index - 1] if index > 0 else 0
+            if (y[index_value] - y[index_value - 1] <= 0 and cp_status) : continue
+            if ((y[index_value] - y[index_value - 1] <= 0) and not cp_status) : 
+                print(index_value)
+                fake_last_index = index -1
+                break
+            if (y[index_value] - y[index_value -1] > 0) : 
+                cp_status = False
+                cp_count += 1
+            if cp_count >= 3: 
+                if index_value - previous_index_value > 50:
                     fake_last_index = index -1
                     break
-                if (y[index_value] - y[index_value -1] > 0) : 
-                    cp_status = False
-                    cp_count += 1
-                if cp_count >= 3: 
-                    fake_last_index = index
-                    break
+                fake_last_index = index
+                break
 
             if len(change_points) > 0:
                 for index in change_points:
