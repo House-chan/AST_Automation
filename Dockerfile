@@ -6,4 +6,4 @@ COPY . /app
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install -r requirements.txt
 
-CMD gunicorn -b 0.0.0.0 'model:app'
+CMD gunicorn -b 0.0.0.0:8080 'model:app'
