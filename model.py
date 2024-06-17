@@ -15,6 +15,7 @@ from flask_cors import CORS
 from PIL import Image
 from io import BytesIO
 from datetime import datetime
+from scipy.stats import trim_mean
 
 
 import PlateDetector
@@ -98,6 +99,11 @@ class PelletsDetector:
                 break
             
         return np.array(intencities)
+    
+    def calculate_trimmed_mean(inten, proportion=0.1):
+        """calculate trimmed mean of each ranged
+        """
+        return trim_mean(inten, proportion)
         
     def predict_diameter(self):
         # transform ALL to polar coordinates
@@ -131,8 +137,11 @@ class PelletsDetector:
             for j in range(len(closing_list[i])):
                 global_closing_list_sort[i][j] = np.sort(closing_list[i][j])
 
+        intensity_r = []
+
         for i in range(len(self.med_loc)):
-            intensity_r.append([((np.mean(inten) + np.max(inten)) / 2) for inten in global_closing_list_sort[i][0:440]])
+            intensity_r.append([PelletsDetector.calculate_trimmed_mean(inten) for inten in global_closing_list_sort()[i][0:440]])
+
 
 
         predict_radius_list = []
@@ -182,7 +191,7 @@ class PelletsDetector:
             if cp_count >= 3: 
                 if index_value - previous_index_value > 50:
                     fake_last_index = index -1
-                    break
+                    break           
                 fake_last_index = index
                 break
 
